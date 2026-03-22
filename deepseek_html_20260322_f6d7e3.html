@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>幻境工坊 | 创意设计作品集</title>
+    <!-- Google Fonts & Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* 全局CSS变量 — 浅色模式 (默认) */
+        :root {
+            --bg-gradient-start: rgba(245, 247, 250, 0.9);
+            --bg-gradient-end: rgba(255, 255, 255, 0.95);
+            --card-bg: rgba(255, 255, 255, 0.75);
+            --card-border: rgba(255, 255, 255, 0.6);
+            --text-primary: #1e1f2c;
+            --text-secondary: #4a4e69;
+            --accent: #5e60ce;
+            --accent-hover: #4c4bb3;
+            --nav-bg: rgba(255, 255, 255, 0.65);
+            --shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+            --glass-blur: blur(12px);
+            --footer-bg: rgba(245, 247, 250, 0.8);
+            --modal-overlay: rgba(0, 0, 0, 0.4);
+        }
+
+        /* 深色模式变量 */
+        body.dark {
+            --bg-gradient-start: #0f0f1a;
+            --bg-gradient-end: #1a1b2f;
+            --card-bg: rgba(30, 30, 45, 0.7);
+            --card-border: rgba(80, 80, 120, 0.3);
+            --text-primary: #f0f0fc;
+            --text-secondary: #b9b9d6;
+            --accent: #9b9cff;
+            --accent-hover: #7c7ee5;
+            --nav-bg: rgba(20, 20, 35, 0.7);
+            --shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            --footer-bg: rgba(15, 15, 26, 0.85);
+            --modal-overlay: rgba(0, 0, 0, 0.7);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+            color: var(--text-primary);
+            transition: background 0.3s ease, color 0.2s ease;
+            min-height: 100vh;
+            backdrop-filter: blur(2px);
+            scroll-behavior: smooth;
+        }
+
+        /* 玻璃导航栏 */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: var(--nav-bg);
+            backdrop-filter: var(--glass-blur);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(120deg, var(--accent), #c77dff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .theme-toggle {
+            background: rgba(128, 128, 128, 0.2);
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+            color: var(--text-primary);
+            backdrop-filter: blur(4px);
+        }
+
+        .theme-toggle:hover {
+            background: var(--accent);
+            color: white;
+            transform: rotate(12deg);
+        }
+
+        /* Hero区域 */
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem 3rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3.2rem;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--accent), #ff9a9e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .date-badge {
+            display: inline-block;
+            background: var(--card-bg);
+            backdrop-filter: blur(8px);
+            padding: 0.5rem 1.2rem;
+            border-radius: 60px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 1px solid var(--card-border);
+            color: var(--accent);
+        }
+
+        /* 网格作品区 */
+        .projects-section {
+            max-width: 1300px;
+            margin: 2rem auto;
+            padding: 0 2rem 4rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60%;
+            height: 3px;
+            background: var(--accent);
+            border-radius: 4px;
+        }
+
+        /* CSS Grid 响应式卡片网格 */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        /* 卡片样式 + 玻璃态 + 悬停动画 */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
+            padding: 1.8rem;
+            border: 1px solid var(--card-border);
+            box-shadow: var(--shadow);
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            cursor: pointer;
+            transform: translateY(0);
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent);
+            box-shadow: 0 25px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-icon {
+            font-size: 2.8rem;
+            color: var(--accent);
+            margin-bottom: 1.2rem;
+        }
+
+        .card h3 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .card p {
+            color: var(--text-secondary);
+            line-height: 1.4;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-btn {
+            background: transparent;
+            border: none;
+            color: var(--accent);
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: gap 0.2s;
+        }
+
+        .card-btn i {
+            font-size: 0.8rem;
+            transition: transform 0.2s;
+        }
+
+        .card:hover .card-btn i {
+            transform: translateX(5px);
+        }
+
+        /* 滚动动画初始样式 (Intersection Observer) */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(35px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 页脚 */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: var(--footer-bg);
+            backdrop-filter: blur(6px);
+            border-top: 1px solid rgba(128, 128, 128, 0.2);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        /* 模态框样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--modal-overlay);
+            backdrop-filter: blur(6px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+
+        .modal.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 2rem;
+            max-width: 500px;
+            width: 85%;
+            padding: 2rem;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.3);
+            transform: scale(0.95);
+            transition: transform 0.25s ease;
+            color: var(--text-primary);
+        }
+
+        .modal.show .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .modal-header h3 {
+            font-size: 1.8rem;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: 0.2s;
+        }
+
+        .close-modal:hover {
+            color: var(--accent);
+            transform: rotate(90deg);
+        }
+
+        .modal-body p {
+            line-height: 1.6;
+            margin: 1rem 0;
+            color: var(--text-secondary);
+        }
+
+        /* 响应式细节 */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0.8rem 1.2rem;
+            }
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            .hero {
+                padding: 2rem 1rem;
+            }
+            .projects-section {
+                padding: 0 1rem 3rem;
+            }
+            .card-grid {
+                gap: 1.2rem;
+            }
+            .card {
+                padding: 1.4rem;
+            }
+        }
+
+        /* 滚动条美观 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(100, 100, 100, 0.1);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo"><i class="fas fa-cube"></i> 幻境工坊</div>
+        <button class="theme-toggle" id="themeToggle" aria-label="深色/浅色模式">
+            <i class="fas fa-moon"></i>
+        </button>
+    </nav>
+
+    <main>
+        <div class="hero">
+            <h1>创造 · 重构 · 沉浸</h1>
+            <p>前沿数字美学与交互体验，为创意而生</p>
+            <div class="date-badge" id="liveDate"></div>
+        </div>
+
+        <div class="projects-section">
+            <div class="section-title">精选项目</div>
+            <div class="card-grid" id="cardGrid">
+                <!-- 卡片 1 -->
+                <div class="card fade-up" data-id="0" data-title="流光幻境 UI 库" data-desc="一套完全基于玻璃态与动态主题的高颜值组件库，适配暗色/亮色双模式，已应用在多个商业项目中。设计系统包含按钮、卡片、导航等。">
+                    <div class="card-icon"><i class="fas fa-palette"></i></div>
+                    <h3>流光幻境 UI 库</h3>
+                    <p>现代玻璃拟态组件系统，支持一键换肤与自适应布局。</p>
+                    <button class="card-btn">探索详情 <i class="fas fa-arrow-right"></i></button>
+                </div>
+                <!-- 卡片 2 -->
+                <div class="card fade-up" data-id="1" data-title="AI 灵感画板" data-desc="基于 canvas 与 机器学习API的实时风格迁移工具，上传图片即可生成艺术效果。前端交互流畅，并支持下载高清作品。">
+                    <div class="card-icon"><i class="fas fa-brain"></i></div>
+                    <h3>AI 灵感画板</h3>
+                    <p>智能艺术生成器，风格迁移 + 实时滤镜，释放创造力。</p>
+                    <button class="card-btn">探索详情 <i class="fas fa-arrow-right"></i></button>
+                </div>
+                <!-- 卡片 3 -->
+                <div class="card fade-up" data-id="2" data-title="星轨数据看板" data-desc="三维可视化宇宙数据集，使用Three.js和卫星数据模拟近地轨道。动态粒子系统展示实时卫星位置，科技感十足。">
+                    <div class="card-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3>星轨数据看板</h3>
+                    <p>沉浸式空间数据可视化，实时渲染轨道与星际尘埃。</p>
+                    <button class="card-btn">探索详情 <i class="fas fa-arrow-right"></i></button>
+                </div>
+                <!-- 卡片 4 -->
+                <div class="card fade-up" data-id="3" data-title="Eco 可持续社区" data-desc="响应式公益网站，整合碳排放计算器与环保文章推送。用户可记录个人碳足迹，获得环保勋章交互。">
+                    <div class="card-icon"><i class="fas fa-leaf"></i></div>
+                    <h3>Eco 可持续社区</h3>
+                    <p>绿色环保行动平台，碳足迹计算 + 资讯聚合。</p>
+                    <button class="card-btn">探索详情 <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2025 幻境工坊 | 设计驱动创新 · 代码构建美学</p>
+    </footer>
+
+    <!-- 模态框结构 -->
+    <div id="projectModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">项目标题</h3>
+                <button class="close-modal" id="closeModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="modalDesc">详细描述内容加载中...</p>
+                <i class="fas fa-microchip" style="color: var(--accent); margin-top: 0.5rem; display: inline-block;"></i> <span style="font-size: 0.85rem;">交互演示 | 创意落地</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // ======================== 1. 主题切换 + localStorage持久化 ========================
+            const themeToggle = document.getElementById('themeToggle');
+            const body = document.body;
+            const icon = themeToggle.querySelector('i');
+            
+            // 读取存储主题
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                body.classList.add('dark');
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                // 默认浅色
+                body.classList.remove('dark');
+                icon.classList.add('fa-moon');
+            }
+            
+            themeToggle.addEventListener('click', () => {
+                if (body.classList.contains('dark')) {
+                    body.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+                    icon.classList.remove('fa-sun');
+                    icon.classList.add('fa-moon');
+                } else {
+                    body.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                }
+            });
+            
+            // ======================== 2. 实时日期显示 ========================
+            function updateDate() {
+                const dateElem = document.getElementById('liveDate');
+                const now = new Date();
+                const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+                dateElem.textContent = now.toLocaleDateString('zh-CN', options) + ' · 灵感时刻';
+            }
+            updateDate();
+            
+            // ======================== 3. 卡片数据模态框交互 (动态填充) ========================
+            const modal = document.getElementById('projectModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalDesc = document.getElementById('modalDesc');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const cards = document.querySelectorAll('.card');
+            
+            // 预先从data属性获取详情数据
+            const projectsData = [
+                { title: "流光幻境 UI 库", desc: "一套完整的设计系统，拥有40+原子组件。基于CSS变量实现实时换肤，适配企业级中后台产品。技术上使用Grid布局、自定义属性以及可访问性设计，在保证美观的同时兼顾性能与可维护性。未来计划开源贡献社区。" },
+                { title: "AI 灵感画板", desc: "利用TensorFlow.js 与 Canvas 构建前端AI绘图工具。用户可选择风格(星夜/浮世绘/抽象)，一键生成全新艺术作品。同时提供画笔压感模拟与图层导出功能。展现了前端与AI模型的结合潜力。" },
+                { title: "星轨数据看板", desc: "Three.js + WebGL 实现3D地球与2000+卫星轨道实时渲染。提供时间轴滑块与数据筛选，支持展示空间碎片密度。该项目荣获校内“最佳数据可视化”提名，技术难点在于粒子优化与相机动画。" },
+                { title: "Eco 可持续社区", desc: "围绕联合国可持续发展目标(SDG13)构建的公益站点。包含碳排放计算器（localStorage记录足迹）、互动地图与环保挑战打卡。前端采用移动优先设计，适配所有设备，极具社会价值。" }
+            ];
+            
+            // 为每个卡片绑定点击事件 (通过按钮或卡片本身)
+            cards.forEach((card, idx) => {
+                const btn = card.querySelector('.card-btn');
+                // 点击卡片任何区域也能触发（提升体验）
+                card.addEventListener('click', (e) => {
+                    // 防止点到按钮内部冒泡重复触发（但无伤大雅）
+                    if(e.target.closest('.card-btn')) return;
+                    openModal(idx);
+                });
+                if(btn) {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        openModal(idx);
+                    });
+                }
+            });
+            
+            function openModal(index) {
+                const project = projectsData[index];
+                modalTitle.textContent = project.title;
+                modalDesc.textContent = project.desc;
+                modal.classList.add('show');
+                document.body.style.overflow = 'hidden'; // 禁止背景滚动
+            }
+            
+            function closeModal() {
+                modal.classList.remove('show');
+                document.body.style.overflow = '';
+            }
+            
+            closeModalBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if(e.target === modal) closeModal();
+            });
+            // ESC键关闭
+            document.addEventListener('keydown', (e) => {
+                if(e.key === 'Escape' && modal.classList.contains('show')) {
+                    closeModal();
+                }
+            });
+            
+            // ======================== 4. Intersection Observer 滚动动画 ========================
+            const fadeElements = document.querySelectorAll('.fade-up');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if(entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target); // 只触发一次
+                    }
+                });
+            }, { threshold: 0.2, rootMargin: "0px 0px -20px 0px" });
+            
+            fadeElements.forEach(el => observer.observe(el));
+            
+            // 为了确保在动态主题下一些卡片边距美观，手动触发一次可见区域检查
+            window.addEventListener('load', () => {
+                // 强制让所有已可见元素立即获得类 (补充安全)
+                fadeElements.forEach(el => {
+                    const rect = el.getBoundingClientRect();
+                    if(rect.top < window.innerHeight - 100) {
+                        el.classList.add('visible');
+                        observer.unobserve(el);
+                    }
+                });
+                // 额外为卡片手动附加样式
+            });
+            
+            // ======================== 5. 轻量级控制台信息 (技术彩蛋) ========================
+            console.log("%c✨ 幻境工坊 | 设计大赛作品  | 技术亮点: 玻璃态+主题切换+Intersection Observer+模态框动态", "color: #5e60ce; font-size: 14px");
+        })();
+    </script>
+</body>
+</html>
